@@ -53,7 +53,7 @@ public class VotoInteractorImpl implements VotoInteractor {
         }
 
         if(!pautaDto.getStatus().equals(PautaStatus.OPEN)) {
-            throw new BadRequestException("Pauta não aberta no momento!");
+            throw new BadRequestException("Pauta já encerrada!");
         }
     }
 
