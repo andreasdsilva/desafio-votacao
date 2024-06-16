@@ -15,11 +15,11 @@ public class ApiUtil {
         return new ResponseEntity<>( body, HttpStatus.OK );
     }
 
-    public static <T> ResponseEntity<T> created() {
-        return new ResponseEntity<>( HttpStatus.CREATED );
-    }
-
     public static <T> ResponseEntity<T> created( T body ) {
         return new ResponseEntity<>( body, HttpStatus.CREATED );
+    }
+
+    public static <T> ResponseEntity<T> response( T body, HttpStatus httpStatus ) {
+        return new ResponseEntity<>( body, httpStatus );
     }
 }
