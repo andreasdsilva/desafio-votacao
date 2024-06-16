@@ -39,7 +39,11 @@ public class VotoInteractorImpl implements VotoInteractor {
                 .build();
         Voto savedVoto = this.repository.save(voto);
 
-        return DtoEntityConverterUtil.convertToDto(savedVoto, VotoDto.class);
+        return VotoDto.builder()
+                .associadoDocumento(savedVoto.getAssociado().getDocumento())
+                .pautaId(savedVoto.getPauta().getId())
+                .voto(savedVoto.getVoto())
+                .build();
     }
 
     private void validateVoto(AssociadoDto associadoDto, PautaDto pautaDto) {
