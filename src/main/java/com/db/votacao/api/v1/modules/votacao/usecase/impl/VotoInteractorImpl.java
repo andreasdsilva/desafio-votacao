@@ -26,6 +26,15 @@ public class VotoInteractorImpl implements VotoInteractor {
     private final AssociadoInteractor associadoInteractor;
     private final PautaInteractor pautaInteractor;
 
+    /**
+     * Method responsible to create Voto by VotoDto
+     * calling validating method and returning
+     * persisted voto as VotoDto
+     *
+     * @param votoDto to create Voto Object
+     * @return persisted VotoDto
+     * @throws Exception
+     */
     @Override
     public VotoDto create(VotoDto votoDto) throws Exception {
         AssociadoDto associadoDto = associadoInteractor.findByDocumento(votoDto.getAssociadoDocumento());
@@ -39,11 +48,25 @@ public class VotoInteractorImpl implements VotoInteractor {
         return VotoMapper.entityToDto(savedVoto);
     }
 
+    /**
+     * Method responsible to call
+     * isolated validating methods for each
+     * object
+     *
+     * @param associadoDto to be validated
+     * @param pautaDto to be validated
+     */
     private void validateVoto(AssociadoDto associadoDto, PautaDto pautaDto) {
         validatePauta(pautaDto);
         validateAssociado(associadoDto, pautaDto);
     }
 
+    /**
+     * Method responsible to validate pautaDto
+     * and throws BadRequestException if it's not valid
+     *
+     * @param pautaDto to be validated
+     */
     private void validatePauta(PautaDto pautaDto) {
         if(pautaDto.getStatus().equals(PautaStatus.WAITING)) {
             throw new BadRequestException("Pauta em aguardo, aguardar até " + DateTimeUtil.getString(pautaDto.getStartTime()));
@@ -54,6 +77,14 @@ public class VotoInteractorImpl implements VotoInteractor {
         }
     }
 
+    /**
+     * Method responsible to validate if
+     * associadoDto already voted, and it is valid
+     * and throws BadRequestException if it's not valid
+     *
+     * @param pautaDto to be validated if associado already voted
+     * @param associadoDto to be validated
+     */
     private void validateAssociado(AssociadoDto associadoDto, PautaDto pautaDto) {
         if(associadoDto.getStatus() == AssociadoStatus.UNABLE_TO_VOTE) {
             throw new BadRequestException("Associado impossibilitado de votar!");

@@ -20,6 +20,15 @@ public class PautaInteractorImpl implements PautaInteractor {
     private final PautaRepository repository;
     private final AssembleiaInteractor assembleiaInteractor;
 
+    /**
+     * Method responsible to create Pauta by PautaDto
+     * calling validating method and returning
+     * persisted pauta as PautaDto
+     *
+     * @param pautaDto to create Pauta Object
+     * @return persisted PautaDto
+     * @throws Exception
+     */
     @Override
     public PautaDto create(PautaDto pautaDto) throws Exception {
         AssembleiaDto assembleiaDto = assembleiaInteractor.findById(pautaDto.getAssembleiaId());
@@ -31,6 +40,14 @@ public class PautaInteractorImpl implements PautaInteractor {
         return DtoEntityConverterUtil.convertToDto(this.repository.save(pauta), PautaDto.class);
     }
 
+    /**
+     * Method responsible to find Pauta by id
+     * and return populated PautaResultDto
+     *
+     * @param id Pauta Id
+     * @return PautaResultDto Object
+     * @throws Exception
+     */
     @Override
     public PautaResultDto getPautaResult(Long id) throws Exception {
         PautaDto pauta = this.findById(id);
@@ -43,12 +60,27 @@ public class PautaInteractorImpl implements PautaInteractor {
         .build();
     }
 
+    /**
+     * Method responsible to find Pauta
+     * and return PautaDto by its id
+     *
+     * @param id pauta id
+     * @return PautaDto Object
+     * @throws Exception
+     */
     @Override
     public PautaDto findById(long id) throws Exception {
         Pauta pauta = this.repository.findById(id).orElseThrow(() -> new NotFoundException("Pauta não encontrada para id: " + id));
         return DtoEntityConverterUtil.convertToDto(pauta, PautaDto.class);
     }
 
+    /**
+     * Method responsible to validate pauta and
+     * assembleia dates
+     *
+     * @param pautaDto PautaDto Object
+     * @param assembleiaDto assembleiaDto object
+     */
     private void validateDate(PautaDto pautaDto, AssembleiaDto assembleiaDto) {
         if(pautaDto.getStartTime().toLocalDate().isBefore(assembleiaDto.getStartDate())
                 || pautaDto.getEndTime().toLocalDate().isAfter(assembleiaDto.getEndDate())) {

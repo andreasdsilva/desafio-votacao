@@ -16,6 +16,13 @@ public class AssociadoInteractorImpl implements AssociadoInteractor {
 
     private final AssociadoRepository repository;
 
+    /**
+     * Method responsible to create Associado by AssociadoDto
+     *
+     * @param associadoDto to create Associado object
+     * @return persisted AssociadoDto
+     * @throws Exception
+     */
     @Override
     public AssociadoDto create(AssociadoDto associadoDto) throws Exception {
         associadoDto.setStatus(AssociadoStatus.ABLE_TO_VOTE);
@@ -25,6 +32,15 @@ public class AssociadoInteractorImpl implements AssociadoInteractor {
        return DtoEntityConverterUtil.convertToDto(savedAssociado, AssociadoDto.class);
     }
 
+
+    /**
+     * Method responsible to find Associado by documento
+     * and return AssociadoDto objecto
+     *
+     * @param doc associado documento
+     * @return AssociadoDto objecto
+     * @throws Exception
+     */
     @Override
     public AssociadoDto findByDocumento(String doc) throws Exception {
         Associado associado = this.repository.findByDocumento(doc).orElseThrow(() -> new NotFoundException("Associado não encontrada para documento: " + doc));
