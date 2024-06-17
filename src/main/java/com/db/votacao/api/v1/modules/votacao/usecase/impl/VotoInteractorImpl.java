@@ -18,6 +18,8 @@ import com.db.votacao.api.v1.modules.votacao.usecase.VotoInteractor;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @AllArgsConstructor
 @Service
 public class VotoInteractorImpl implements VotoInteractor {
@@ -47,8 +49,8 @@ public class VotoInteractorImpl implements VotoInteractor {
     }
 
     private void validateVoto(AssociadoDto associadoDto, PautaDto pautaDto) {
-        validateAssociado(associadoDto);
         validatePauta(pautaDto);
+        validateAssociado(associadoDto, pautaDto);
     }
 
     private void validatePauta(PautaDto pautaDto) {
@@ -61,9 +63,13 @@ public class VotoInteractorImpl implements VotoInteractor {
         }
     }
 
-    private void validateAssociado(AssociadoDto associadoDto) {
+    private void validateAssociado(AssociadoDto associadoDto, PautaDto pautaDto) {
         if(associadoDto.getStatus() == AssociadoStatus.UNABLE_TO_VOTE) {
             throw new BadRequestException("Associado impossibilitado de votar!");
+        }
+
+        if(pautaDto.getVotos().stream().anyMatch(x -> Objects.equals(x.getAssociado().getId(), associadoDto.getId()))) {
+            throw new BadRequestException("Voto de associado já contabilizado!");
         }
     }
 }
