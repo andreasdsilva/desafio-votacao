@@ -3,15 +3,13 @@ package com.db.votacao.api.v1.modules.votacao.usecase.impl;
 import com.db.votacao.api.v1.modules.votacao.model.dto.AssociadoDto;
 import com.db.votacao.api.v1.modules.votacao.model.dto.PautaDto;
 import com.db.votacao.api.v1.modules.votacao.model.dto.VotoDto;
-import com.db.votacao.api.v1.modules.votacao.model.entity.Associado;
-import com.db.votacao.api.v1.modules.votacao.model.entity.Pauta;
 import com.db.votacao.api.v1.modules.votacao.model.entity.Voto;
 import com.db.votacao.api.v1.modules.votacao.model.enums.AssociadoStatus;
 import com.db.votacao.api.v1.modules.votacao.model.enums.PautaStatus;
+import com.db.votacao.api.v1.modules.votacao.model.mapper.VotoMapper;
 import com.db.votacao.api.v1.modules.votacao.repository.VotoRepository;
 import com.db.votacao.api.v1.modules.votacao.shared.exceptions.BadRequestException;
 import com.db.votacao.api.v1.modules.votacao.shared.util.DateTimeUtil;
-import com.db.votacao.api.v1.modules.votacao.shared.util.DtoEntityConverterUtil;
 import com.db.votacao.api.v1.modules.votacao.usecase.AssociadoInteractor;
 import com.db.votacao.api.v1.modules.votacao.usecase.PautaInteractor;
 import com.db.votacao.api.v1.modules.votacao.usecase.VotoInteractor;
@@ -35,17 +33,10 @@ public class VotoInteractorImpl implements VotoInteractor {
 
         validateVoto(associadoDto, pautaDto);
 
-        Voto voto = Voto.builder()
-                .pauta(DtoEntityConverterUtil.convertToEntity(pautaDto, Pauta.class))
-                .associado(DtoEntityConverterUtil.convertToEntity(associadoDto, Associado.class))
-                .build();
+        Voto voto = VotoMapper.dtoToEntity(votoDto, pautaDto, associadoDto);
         Voto savedVoto = this.repository.save(voto);
 
-        return VotoDto.builder()
-                .associadoDocumento(savedVoto.getAssociado().getDocumento())
-                .pautaId(savedVoto.getPauta().getId())
-                .voto(savedVoto.getVoto())
-                .build();
+        return VotoMapper.entityToDto(savedVoto);
     }
 
     private void validateVoto(AssociadoDto associadoDto, PautaDto pautaDto) {
