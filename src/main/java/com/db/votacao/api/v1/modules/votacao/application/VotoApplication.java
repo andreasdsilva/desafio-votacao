@@ -25,13 +25,13 @@ public class VotoApplication {
     private final VotoInteractor votoInteractor;
 
     @Operation(
-            operationId = "create pauta",
-            summary = "Cria pauta e persiste no banco",
-            tags = { "pauta" },
+            operationId = "create voto",
+            summary = "Cria voto e persiste no banco",
+            tags = { "voto" },
             responses = {
                     @ApiResponse(
                             responseCode = "201",
-                            description = "pauta created",
+                            description = "voto created",
                             content = @Content(
                                     schema = @Schema( implementation = PautaDto.class ),
                                     mediaType = MediaType.APPLICATION_JSON_VALUE
