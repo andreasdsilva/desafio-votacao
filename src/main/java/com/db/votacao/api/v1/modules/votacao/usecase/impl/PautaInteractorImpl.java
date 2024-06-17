@@ -4,6 +4,7 @@ import com.db.votacao.api.v1.modules.votacao.model.dto.AssembleiaDto;
 import com.db.votacao.api.v1.modules.votacao.model.dto.PautaDto;
 import com.db.votacao.api.v1.modules.votacao.model.dto.PautaResultDto;
 import com.db.votacao.api.v1.modules.votacao.model.entity.Pauta;
+import com.db.votacao.api.v1.modules.votacao.model.mapper.PautaResultMapper;
 import com.db.votacao.api.v1.modules.votacao.repository.PautaRepository;
 import com.db.votacao.api.v1.modules.votacao.shared.exceptions.BadRequestException;
 import com.db.votacao.api.v1.modules.votacao.shared.exceptions.NotFoundException;
@@ -50,14 +51,9 @@ public class PautaInteractorImpl implements PautaInteractor {
      */
     @Override
     public PautaResultDto getPautaResult(Long id) throws Exception {
-        PautaDto pauta = this.findById(id);
+        PautaDto pautaDto = this.findById(id);
 
-        return PautaResultDto.builder()
-                .pautaId(pauta.getId())
-                .assembleiaId(pauta.getAssembleiaId())
-                .votos(pauta.getVotos().size())
-                .status(pauta.getStatus())
-        .build();
+        return PautaResultMapper.toDto(pautaDto);
     }
 
     /**
