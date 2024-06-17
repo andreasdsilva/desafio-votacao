@@ -1,8 +1,10 @@
 package com.db.votacao.api.v1.modules.votacao.shared.util;
 
 
+import lombok.experimental.UtilityClass;
 import org.springframework.beans.BeanUtils;
 
+@UtilityClass
 public class DtoEntityConverterUtil {
 
     public static <D, E> E convertToEntity(D dto, Class<E> entityClass) throws Exception {

@@ -1,8 +1,10 @@
 package com.db.votacao.api.v1.modules.votacao.shared.util;
 
+import lombok.experimental.UtilityClass;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+@UtilityClass
 public class ApiUtil {
 
     public static final String VERSION = "api/v1/";
