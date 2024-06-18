@@ -12,8 +12,10 @@ import com.db.votacao.api.v1.modules.votacao.shared.util.DtoEntityConverterUtil;
 import com.db.votacao.api.v1.modules.votacao.usecase.AssembleiaInteractor;
 import com.db.votacao.api.v1.modules.votacao.usecase.PautaInteractor;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @AllArgsConstructor
 @Service
 public class PautaInteractorImpl implements PautaInteractor {
@@ -32,13 +34,21 @@ public class PautaInteractorImpl implements PautaInteractor {
      */
     @Override
     public PautaDto create(PautaDto pautaDto) throws Exception {
-        AssembleiaDto assembleiaDto = assembleiaInteractor.findById(pautaDto.getAssembleiaId());
+        log.info("Pauta: Método create acionado");
 
-        validateDate(pautaDto, assembleiaDto);
+        try {
+            AssembleiaDto assembleiaDto = assembleiaInteractor.findById(pautaDto.getAssembleiaId());
 
-        Pauta pauta = DtoEntityConverterUtil.convertToEntity(pautaDto, Pauta.class);
+            validateDate(pautaDto, assembleiaDto);
 
-        return DtoEntityConverterUtil.convertToDto(this.repository.save(pauta), PautaDto.class);
+            Pauta pauta = DtoEntityConverterUtil.convertToEntity(pautaDto, Pauta.class);
+
+            return DtoEntityConverterUtil.convertToDto(this.repository.save(pauta), PautaDto.class);
+        }
+        catch (RuntimeException e) {
+            log.error("Pauta: Erro criarPauta. Mensagem: {}", e.getMessage());
+            throw e;
+        }
     }
 
     /**
@@ -51,9 +61,16 @@ public class PautaInteractorImpl implements PautaInteractor {
      */
     @Override
     public PautaResultDto getPautaResult(Long id) throws Exception {
-        PautaDto pautaDto = this.findById(id);
+        log.info("Pauta: Método getPautaResult acionado");
+        try {
+            PautaDto pautaDto = this.findById(id);
 
-        return PautaResultMapper.toDto(pautaDto);
+            return PautaResultMapper.toDto(pautaDto);
+        }
+        catch (RuntimeException e) {
+            log.error("Pauta: Erro gerar PautaResult com id pauta: {}. Mensagem: {}", id, e.getMessage());
+            throw e;
+        }
     }
 
     /**
@@ -66,8 +83,17 @@ public class PautaInteractorImpl implements PautaInteractor {
      */
     @Override
     public PautaDto findById(long id) throws Exception {
-        Pauta pauta = this.repository.findById(id).orElseThrow(() -> new NotFoundException("Pauta não encontrada para id: " + id));
-        return DtoEntityConverterUtil.convertToDto(pauta, PautaDto.class);
+        log.info("Pauta: Método findById acionado");
+        try {
+            Pauta pauta = this.repository.findById(id)
+                    .orElseThrow(() -> new NotFoundException("Pauta não encontrada para id: " + id));
+
+            return DtoEntityConverterUtil.convertToDto(pauta, PautaDto.class);
+        }
+        catch (RuntimeException e) {
+            log.error("Associado: Erro ao encontrar Pauta com id: {}. Mensagem: {}", id, e.getMessage());
+            throw e;
+        }
     }
 
     /**

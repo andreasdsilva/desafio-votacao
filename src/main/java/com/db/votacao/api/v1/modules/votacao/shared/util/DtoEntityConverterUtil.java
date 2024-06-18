@@ -2,8 +2,10 @@ package com.db.votacao.api.v1.modules.votacao.shared.util;
 
 
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 
+@Slf4j
 @UtilityClass
 public class DtoEntityConverterUtil {
 
@@ -13,7 +15,8 @@ public class DtoEntityConverterUtil {
             convertedEntity = entityClass.getDeclaredConstructor().newInstance();
             BeanUtils.copyProperties(dto, convertedEntity);
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            log.error("Falha ao converter dto para entidade!", e);
+            throw new Exception("Falha ao converter dto para entidade!", e);
         }
         return convertedEntity;
     }
@@ -24,7 +27,8 @@ public class DtoEntityConverterUtil {
             convertedDto = dtoClass.getDeclaredConstructor().newInstance();
             BeanUtils.copyProperties(entity, convertedDto);
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            log.error("Falha ao converter entidade para dto!", e);
+            throw new Exception("Falha ao entidade para dto!", e);
         }
         return convertedDto;
     }

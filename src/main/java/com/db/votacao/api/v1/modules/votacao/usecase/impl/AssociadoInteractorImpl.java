@@ -8,8 +8,10 @@ import com.db.votacao.api.v1.modules.votacao.shared.exceptions.NotFoundException
 import com.db.votacao.api.v1.modules.votacao.shared.util.DtoEntityConverterUtil;
 import com.db.votacao.api.v1.modules.votacao.usecase.AssociadoInteractor;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @AllArgsConstructor
 @Service
 public class AssociadoInteractorImpl implements AssociadoInteractor {
@@ -25,11 +27,19 @@ public class AssociadoInteractorImpl implements AssociadoInteractor {
      */
     @Override
     public AssociadoDto create(AssociadoDto associadoDto) throws Exception {
-        associadoDto.setStatus(AssociadoStatus.ABLE_TO_VOTE);
-        Associado associado = DtoEntityConverterUtil.convertToEntity(associadoDto, Associado.class);
-        Associado savedAssociado = this.repository.save(associado);
+        log.info("Associado: Método create associado acionado");
 
-       return DtoEntityConverterUtil.convertToDto(savedAssociado, AssociadoDto.class);
+        try {
+            associadoDto.setStatus(AssociadoStatus.ABLE_TO_VOTE);
+            Associado associado = DtoEntityConverterUtil.convertToEntity(associadoDto, Associado.class);
+            Associado savedAssociado = this.repository.save(associado);
+
+            return DtoEntityConverterUtil.convertToDto(savedAssociado, AssociadoDto.class);
+        }
+        catch (RuntimeException e) {
+            log.error("Associado: Erro ao criar Associado. Mensagem: {}", e.getMessage(), e);
+            throw e;
+        }
     }
 
 
@@ -43,8 +53,16 @@ public class AssociadoInteractorImpl implements AssociadoInteractor {
      */
     @Override
     public AssociadoDto findByDocumento(String doc) throws Exception {
-        Associado associado = this.repository.findByDocumento(doc).orElseThrow(() -> new NotFoundException("Associado não encontrada para documento: " + doc));
+        log.info("Associado: Método findByDocumento acionado");
+        try {
+            Associado associado = this.repository.findByDocumento(doc)
+                    .orElseThrow(() -> new NotFoundException("Associado não encontrada para documento: " + doc));
 
-        return DtoEntityConverterUtil.convertToDto(associado, AssociadoDto.class);
+            return DtoEntityConverterUtil.convertToDto(associado, AssociadoDto.class);
+        }
+        catch (RuntimeException e) {
+            log.error("Associado: Erro ao encontrar Associado com documento: {}. Mensagem: {}", doc, e.getMessage());
+            throw e;
+        }
     }
 }

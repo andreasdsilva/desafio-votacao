@@ -14,10 +14,12 @@ import com.db.votacao.api.v1.modules.votacao.usecase.AssociadoInteractor;
 import com.db.votacao.api.v1.modules.votacao.usecase.PautaInteractor;
 import com.db.votacao.api.v1.modules.votacao.usecase.VotoInteractor;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
+@Slf4j
 @AllArgsConstructor
 @Service
 public class VotoInteractorImpl implements VotoInteractor {
@@ -37,15 +39,23 @@ public class VotoInteractorImpl implements VotoInteractor {
      */
     @Override
     public VotoDto create(VotoDto votoDto) throws Exception {
-        AssociadoDto associadoDto = associadoInteractor.findByDocumento(votoDto.getAssociadoDocumento());
-        PautaDto pautaDto = pautaInteractor.findById(votoDto.getPautaId());
+        log.info("Voto: Método create acionado");
 
-        validateVoto(associadoDto, pautaDto);
+        try {
+            AssociadoDto associadoDto = associadoInteractor.findByDocumento(votoDto.getAssociadoDocumento());
+            PautaDto pautaDto = pautaInteractor.findById(votoDto.getPautaId());
 
-        Voto voto = VotoMapper.dtoToEntity(votoDto, pautaDto, associadoDto);
-        Voto savedVoto = this.repository.save(voto);
+            validateVoto(associadoDto, pautaDto);
 
-        return VotoMapper.entityToDto(savedVoto);
+            Voto voto = VotoMapper.dtoToEntity(votoDto, pautaDto, associadoDto);
+            Voto savedVoto = this.repository.save(voto);
+
+            return VotoMapper.entityToDto(savedVoto);
+        }
+        catch (RuntimeException e) {
+            log.error("Voto: Erro ao criar Voto. Mensagem: {}", e.getMessage());
+            throw e;
+        }
     }
 
     /**
