@@ -1,6 +1,7 @@
 package com.db.votacao.api.v1.modules.votacao.application;
 
 import com.db.votacao.api.v1.modules.votacao.model.dto.VotoDto;
+import com.db.votacao.api.v1.modules.votacao.model.enums.VotoResult;
 import com.db.votacao.api.v1.modules.votacao.usecase.VotoInteractor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,6 +51,7 @@ class VotoApplicationTest {
         VotoDto votoDto = new VotoDto();
         votoDto.setAssociadoDocumento("123456789");
         votoDto.setPautaId(1L);
+        votoDto.setVotoResult(VotoResult.SIM);
 
         VotoDto createdVotoDto = new VotoDto();
 

@@ -30,7 +30,7 @@ public class Pauta {
     private String description = "";
 
     @Column(name = "assembleia_id", nullable = false)
-    private long assembleiaId;
+    private Long assembleiaId;
 
     @OneToMany(mappedBy = "pauta", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default

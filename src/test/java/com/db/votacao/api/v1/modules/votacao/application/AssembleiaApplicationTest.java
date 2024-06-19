@@ -1,6 +1,7 @@
 package com.db.votacao.api.v1.modules.votacao.application;
 
 import com.db.votacao.api.v1.modules.votacao.model.dto.AssembleiaDto;
+import com.db.votacao.api.v1.modules.votacao.model.dto.PautaDto;
 import com.db.votacao.api.v1.modules.votacao.usecase.AssembleiaInteractor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,8 +19,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
@@ -66,5 +70,19 @@ class AssembleiaApplicationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(assembleiaDto)))
                 .andExpect(status().isCreated());
+    }
+
+    @Test
+    @DisplayName("test endpoint get call")
+    public void testGetAssembleia() throws Exception {
+        AssembleiaDto assembleiaDto = new AssembleiaDto();
+        assembleiaDto.setName("pauta");
+        assembleiaDto.setDescription("pauta");
+
+        when(assembleiaInteractor.findById(anyLong())).thenReturn(assembleiaDto);
+
+        mockMvc.perform(get("/api/v1/assembleia/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 }

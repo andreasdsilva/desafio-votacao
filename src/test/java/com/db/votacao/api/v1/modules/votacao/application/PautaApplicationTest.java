@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -75,9 +76,7 @@ class PautaApplicationTest {
         pautaDto.setStartTime(LocalDateTime.now());
         pautaDto.setAssembleiaId(1L);
 
-        PautaDto createdPautaDto = new PautaDto();
-
-        when(pautaInteractor.create(any(PautaDto.class))).thenReturn(createdPautaDto);
+        when(pautaInteractor.findById(anyLong())).thenReturn(pautaDto);
 
         mockMvc.perform(get("/api/v1/pauta/result/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON))

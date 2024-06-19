@@ -49,7 +49,7 @@ class PautaInteractorImplTest {
         pautaDto.setAssembleiaId(1L);
         pautaDto.setStartTime(LocalDateTime.now());
         pautaDto.setEndTime(LocalDateTime.now().plusMinutes(1L));
-        pautaDto.setStatus(PautaStatus.WAITING);
+        pautaDto.setStatus(PautaStatus.OPEN);
 
         AssembleiaDto assembleiaDto = new AssembleiaDto();
         assembleiaDto.setStartDate(LocalDate.now());
@@ -94,14 +94,19 @@ class PautaInteractorImplTest {
 
         Pauta pauta = new Pauta();
         pauta.setId(1);
+        pauta.setAssembleiaId(1L);
+        pauta.setStartTime(LocalDateTime.now());
+        pauta.setEndTime(LocalDateTime.now());
+        pauta.setStatus(PautaStatus.WAITING);
 
         when(repository.findById(pautaId)).thenReturn(Optional.of(pauta));
 
         PautaDto result = interactor.findById(pautaId);
 
         PautaDto pautaDtoExpected = new PautaDto();
-        pautaDtoExpected.setAssembleiaId(0L);
-        pautaDtoExpected.setStatus(PautaStatus.WAITING);
+        pautaDtoExpected.setAssembleiaId(1L);
+        pautaDtoExpected.setStatus(PautaStatus.NULLIFIED);
+        pautaDtoExpected.setStartTime(result.getStartTime());
         pautaDtoExpected.setEndTime(result.getEndTime());
         pautaDtoExpected.setId(1);
 
@@ -142,6 +147,10 @@ class PautaInteractorImplTest {
 
         Pauta pauta = new Pauta();
         pauta.setId(1);
+        pauta.setAssembleiaId(1L);
+        pauta.setStartTime(LocalDateTime.now());
+        pauta.setEndTime(LocalDateTime.now());
+        pauta.setStatus(PautaStatus.WAITING);
 
         when(repository.findById(pautaId)).thenReturn(Optional.of(pauta));
 
@@ -149,7 +158,8 @@ class PautaInteractorImplTest {
 
         PautaResultDto pautaResultDtoExpected = new PautaResultDto();
         pautaResultDtoExpected.setPautaId(1);
-        pautaResultDtoExpected.setStatus(PautaStatus.WAITING);
+        pautaResultDtoExpected.setAssembleiaId(1);
+        pautaResultDtoExpected.setStatus(PautaStatus.NULLIFIED);
 
         assertEquals(pautaResultDtoExpected, result);
     }
