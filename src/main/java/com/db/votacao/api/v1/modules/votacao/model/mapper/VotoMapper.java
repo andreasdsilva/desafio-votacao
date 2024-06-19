@@ -20,6 +20,7 @@ public class VotoMapper {
 
     public static VotoDto entityToDto(Voto voto) {
         return VotoDto.builder()
+                .id(voto.getId())
                 .associadoDocumento(voto.getAssociado().getDocumento())
                 .pautaId(voto.getPauta().getId())
                 .votoResult(voto.getVotoResult())
