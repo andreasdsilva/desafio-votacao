@@ -51,7 +51,7 @@ public class AssociadoInteractorImpl implements AssociadoInteractor {
      *
      * @param documento 
      */
-    private void validateExistingAssociado(String documento) throws Exception {
+    private void validateExistingAssociado(String documento) {
         if(this.repository.findByDocumento(documento).isEmpty()) {
             return;
         }

@@ -28,6 +28,6 @@ public class Voto {
     @JoinColumn( name = "pauta_id" )
     private Pauta pauta;
 
-    @Column( name = "voto", nullable = false )
-    private VotoResult voto;
+    @Column( name = "voto_result", nullable = false )
+    private VotoResult votoResult;
 }

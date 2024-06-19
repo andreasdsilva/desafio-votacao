@@ -28,23 +28,7 @@ CREATE TABLE voto (
     id BIGSERIAL PRIMARY KEY,
     associado_id BIGINT,
     pauta_id BIGINT,
-    voto VARCHAR(50) NOT NULL,
+    voto_result VARCHAR(50) NOT NULL,
     FOREIGN KEY (associado_id) REFERENCES associado(id),
     FOREIGN KEY (pauta_id) REFERENCES pauta(id)
-);
-
-CREATE TABLE assembleia_pauta (
-    assembleia_id BIGINT,
-    pauta_id BIGINT,
-    PRIMARY KEY (assembleia_id, pauta_id),
-    FOREIGN KEY (assembleia_id) REFERENCES assembleia(id),
-    FOREIGN KEY (pauta_id) REFERENCES pauta(id)
-);
-
-CREATE TABLE pauta_voto (
-    pauta_id BIGINT,
-    voto_id BIGINT,
-    PRIMARY KEY (pauta_id, voto_id),
-    FOREIGN KEY (pauta_id) REFERENCES pauta(id),
-    FOREIGN KEY (voto_id) REFERENCES voto(id)
 );

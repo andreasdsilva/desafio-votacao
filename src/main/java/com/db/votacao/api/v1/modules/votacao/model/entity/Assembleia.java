@@ -35,14 +35,7 @@ public class Assembleia {
     private LocalDate creationDate = LocalDate.now();
 
     @OneToMany( cascade = CascadeType.ALL )
-    @JoinTable(name = "assembleia_pauta",
-            joinColumns = {
-                @JoinColumn(name = "assembleia_id", referencedColumnName = "id")
-            },
-            inverseJoinColumns = {
-                @JoinColumn(name = "pauta_id", referencedColumnName = "id")
-            }
-    )
+    @JoinColumn(name = "assembleia_id", referencedColumnName = "id")
     @Builder.Default
     List<Pauta> pautas = new ArrayList<>();
 

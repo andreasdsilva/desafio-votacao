@@ -29,17 +29,10 @@ public class Pauta {
     @Builder.Default
     private String description = "";
 
+    @Column(name = "assembleia_id", nullable = false)
     private long assembleiaId;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "pauta_voto",
-            joinColumns = {
-                @JoinColumn(name = "pauta_id", referencedColumnName = "id")
-            },
-            inverseJoinColumns = {
-                @JoinColumn(name = "voto_id", referencedColumnName = "id")
-            }
-    )
+    @OneToMany(mappedBy = "pauta", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Voto> votos = new ArrayList<>();
 
@@ -65,8 +58,8 @@ public class Pauta {
             return PautaStatus.OPEN;
         }
 
-        long approvedVotes = votos.stream().filter( voto -> voto.getVoto().equals( VotoResult.SIM )).count();
-        long reprovedVotes = votos.stream().filter( voto -> voto.getVoto().equals( VotoResult.NAO )).count();
+        long approvedVotes = votos.stream().filter( voto -> voto.getVotoResult().equals( VotoResult.SIM )).count();
+        long reprovedVotes = votos.stream().filter( voto -> voto.getVotoResult().equals( VotoResult.NAO )).count();
 
         if( approvedVotes <= 0 && reprovedVotes <= 0 ) {
             return PautaStatus.NULLIFIED;

@@ -4,6 +4,7 @@ import com.db.votacao.api.v1.modules.votacao.model.dto.AssociadoDto;
 import com.db.votacao.api.v1.modules.votacao.model.entity.Associado;
 import com.db.votacao.api.v1.modules.votacao.model.enums.AssociadoStatus;
 import com.db.votacao.api.v1.modules.votacao.repository.AssociadoRepository;
+import com.db.votacao.api.v1.modules.votacao.shared.exceptions.BadRequestException;
 import com.db.votacao.api.v1.modules.votacao.shared.exceptions.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -77,5 +79,19 @@ class AssociadoInteractorImplTest {
 
         assertEquals(associadoDto, result);
         verify(repository).save(associado);
+    }
+
+    @Test
+    @DisplayName("Testing findByDoc BadRequestException - existing associado")
+    void testFindByDocExistingAssociado() {
+        AssociadoDto associadoDto = new AssociadoDto();
+        associadoDto.setDocumento("123456789");
+
+        when(repository.findByDocumento(anyString())).thenReturn(Optional.of(new Associado()));
+
+        BadRequestException exception = assertThrows(BadRequestException.class,
+                () -> interactor.create(associadoDto));
+
+        assertEquals("Associado ja existente para documento: 123456789", exception.getMessage());
     }
 }

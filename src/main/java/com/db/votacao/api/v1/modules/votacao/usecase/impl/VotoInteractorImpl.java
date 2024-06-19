@@ -49,7 +49,7 @@ public class VotoInteractorImpl implements VotoInteractor {
             validateVoto(associadoDto, pautaDto);
 
             Voto voto = VotoMapper.dtoToEntity(votoDto, pautaDto, associadoDto);
-            voto.setVoto(votoDto.getVotoResult());
+            voto.setVotoResult(votoDto.getVotoResult());
             Voto savedVoto = this.repository.save(voto);
 
             return VotoMapper.entityToDto(savedVoto);
