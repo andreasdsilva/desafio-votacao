@@ -47,4 +47,32 @@ public class AssembleiaApplication {
     public ResponseEntity<AssembleiaDto> create(@RequestBody @Valid AssembleiaDto assembleiaDto) throws Exception {
         return ApiUtil.created(assembleiaInteractor.create(assembleiaDto));
     }
+
+    @Operation(
+            operationId = "get assembleia",
+            summary = "Retornar assembleia pelo id",
+            tags = { "assembleia" },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "assembleia returned",
+                            content = @Content(
+                                    schema = @Schema( implementation = Valid.class ),
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "Assembleia NotFound",
+                            content = @Content(
+                                    schema = @Schema( implementation = Valid.class ),
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE
+                            )
+                    )
+            }
+    )
+    @GetMapping("/{id}")
+    public ResponseEntity<AssembleiaDto> get(@PathVariable("id") Long id) throws Exception {
+        return ApiUtil.ok(assembleiaInteractor.findById(id));
+    }
 }
