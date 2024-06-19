@@ -2,6 +2,11 @@ package com.db.votacao.api.v1.modules.votacao.model.dto;
 
 import com.db.votacao.api.v1.modules.votacao.model.entity.Voto;
 import com.db.votacao.api.v1.modules.votacao.model.enums.PautaStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -31,7 +36,12 @@ public class PautaDto {
     private List<Voto> votos = new ArrayList<>();
 
     @NotNull(message = "Pauta sem data e hora de início")
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime startTime;
+
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime endTime;
 
     private PautaStatus status;

@@ -60,15 +60,15 @@ public class PautaInteractorImpl implements PautaInteractor {
      * @throws Exception
      */
     @Override
-    public PautaResultDto getPautaResult(Long id) throws Exception {
+    public PautaResultDto getPautaResult(Long pautaId) throws Exception {
         log.info("Pauta: Método getPautaResult acionado");
         try {
-            PautaDto pautaDto = this.findById(id);
+            PautaDto pautaDto = this.findById(pautaId);
 
             return PautaResultMapper.toDto(pautaDto);
         }
         catch (RuntimeException e) {
-            log.error("Pauta: Erro gerar PautaResult com id pauta: {}. Mensagem: {}", id, e.getMessage());
+            log.error("Pauta: Erro gerar PautaResult com id pauta: {}. Mensagem: {}", pautaId, e.getMessage());
             throw e;
         }
     }

@@ -3,15 +3,13 @@ package com.db.votacao.api.v1.modules.votacao.model.dto;
 import com.db.votacao.api.v1.modules.votacao.model.enums.VotoResult;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
+@EqualsAndHashCode
 public class VotoDto {
 
     private long id;

@@ -5,11 +5,13 @@ import com.db.votacao.api.v1.modules.votacao.validator.ValidCpfCnpj;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@EqualsAndHashCode
 public class AssociadoDto {
 
     private Long id;
@@ -18,7 +20,7 @@ public class AssociadoDto {
     private String nome;
 
     @NotBlank(message = "Associado sem Documento informado")
-    @ValidCpfCnpj()
+    @ValidCpfCnpj
     private String documento;
 
     private AssociadoStatus status;
