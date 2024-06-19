@@ -6,6 +6,7 @@ import com.db.votacao.api.v1.modules.votacao.model.dto.VotoDto;
 import com.db.votacao.api.v1.modules.votacao.model.entity.Voto;
 import com.db.votacao.api.v1.modules.votacao.model.enums.AssociadoStatus;
 import com.db.votacao.api.v1.modules.votacao.model.enums.PautaStatus;
+import com.db.votacao.api.v1.modules.votacao.model.enums.VotoResult;
 import com.db.votacao.api.v1.modules.votacao.model.mapper.VotoMapper;
 import com.db.votacao.api.v1.modules.votacao.repository.VotoRepository;
 import com.db.votacao.api.v1.modules.votacao.shared.exceptions.BadRequestException;
@@ -48,6 +49,7 @@ public class VotoInteractorImpl implements VotoInteractor {
             validateVoto(associadoDto, pautaDto);
 
             Voto voto = VotoMapper.dtoToEntity(votoDto, pautaDto, associadoDto);
+            voto.setVoto(votoDto.getVotoResult());
             Voto savedVoto = this.repository.save(voto);
 
             return VotoMapper.entityToDto(savedVoto);

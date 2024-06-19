@@ -38,10 +38,9 @@ public class PautaInteractorImpl implements PautaInteractor {
 
         try {
             AssembleiaDto assembleiaDto = assembleiaInteractor.findById(pautaDto.getAssembleiaId());
-
-            validateDate(pautaDto, assembleiaDto);
-
             Pauta pauta = DtoEntityConverterUtil.convertToEntity(pautaDto, Pauta.class);
+
+            validateDate(pauta, assembleiaDto);
 
             return DtoEntityConverterUtil.convertToDto(this.repository.save(pauta), PautaDto.class);
         }
@@ -100,12 +99,12 @@ public class PautaInteractorImpl implements PautaInteractor {
      * Method responsible to validate pauta and
      * assembleia dates
      *
-     * @param pautaDto PautaDto Object
+     * @param pauta PautaDto Object
      * @param assembleiaDto assembleiaDto object
      */
-    private void validateDate(PautaDto pautaDto, AssembleiaDto assembleiaDto) {
-        if(pautaDto.getStartTime().toLocalDate().isBefore(assembleiaDto.getStartDate())
-                || pautaDto.getEndTime().toLocalDate().isAfter(assembleiaDto.getEndDate())) {
+    private void validateDate(Pauta pauta, AssembleiaDto assembleiaDto) {
+        if(pauta.getStartTime().toLocalDate().isBefore(assembleiaDto.getStartDate())
+                || pauta.getEndTime().toLocalDate().isAfter(assembleiaDto.getEndDate())) {
             throw new BadRequestException("Data de votação da pauta deve ser entre a data da assembleia!");
         }
     }

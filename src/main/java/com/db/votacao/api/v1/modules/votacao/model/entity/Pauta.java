@@ -45,8 +45,7 @@ public class Pauta {
 
     private LocalDateTime startTime;
 
-    @Builder.Default
-    private LocalDateTime endTime = LocalDateTime.now().plusMinutes(1);
+    private LocalDateTime endTime;
 
     @Transient
     @Enumerated( EnumType.STRING )
@@ -58,9 +57,12 @@ public class Pauta {
     }
 
     private PautaStatus getStatusUpdated() {
-        if(endTime.isAfter(LocalDateTime.now())
-            || (startTime.isAfter(LocalDateTime.now()) && endTime.isBefore(LocalDateTime.now()))) {
+        if(startTime.isAfter(LocalDateTime.now())) {
             return PautaStatus.WAITING;
+        }
+
+        if(startTime.isBefore(LocalDateTime.now()) && endTime.isAfter(LocalDateTime.now())) {
+            return PautaStatus.OPEN;
         }
 
         long approvedVotes = votos.stream().filter( voto -> voto.getVoto().equals( VotoResult.SIM )).count();

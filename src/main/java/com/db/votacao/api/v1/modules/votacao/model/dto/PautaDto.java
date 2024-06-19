@@ -42,7 +42,7 @@ public class PautaDto {
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    private LocalDateTime endTime;
+    private LocalDateTime endTime = LocalDateTime.now().plusMinutes(1);
 
     private PautaStatus status;
 }

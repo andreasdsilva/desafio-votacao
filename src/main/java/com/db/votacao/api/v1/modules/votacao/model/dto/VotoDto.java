@@ -1,6 +1,8 @@
 package com.db.votacao.api.v1.modules.votacao.model.dto;
 
 import com.db.votacao.api.v1.modules.votacao.model.enums.VotoResult;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -20,5 +22,6 @@ public class VotoDto {
     @NotNull(message = "ID de Pauta deve ser informado!")
     private long pautaId;
 
-    private VotoResult voto;
+    @NotNull(message = "Voto deve ser informado!")
+    private VotoResult votoResult;
 }

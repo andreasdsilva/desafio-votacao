@@ -22,7 +22,7 @@ public class VotoMapper {
         return VotoDto.builder()
                 .associadoDocumento(voto.getAssociado().getDocumento())
                 .pautaId(voto.getPauta().getId())
-                .voto(voto.getVoto())
+                .votoResult(voto.getVoto())
                 .build();
     }
 }

@@ -4,6 +4,7 @@ import com.db.votacao.api.v1.modules.votacao.model.dto.AssociadoDto;
 import com.db.votacao.api.v1.modules.votacao.model.entity.Associado;
 import com.db.votacao.api.v1.modules.votacao.model.enums.AssociadoStatus;
 import com.db.votacao.api.v1.modules.votacao.repository.AssociadoRepository;
+import com.db.votacao.api.v1.modules.votacao.shared.exceptions.BadRequestException;
 import com.db.votacao.api.v1.modules.votacao.shared.exceptions.NotFoundException;
 import com.db.votacao.api.v1.modules.votacao.shared.util.DtoEntityConverterUtil;
 import com.db.votacao.api.v1.modules.votacao.usecase.AssociadoInteractor;
@@ -30,6 +31,8 @@ public class AssociadoInteractorImpl implements AssociadoInteractor {
         log.info("Associado: Método create associado acionado");
 
         try {
+            validateExistingAssociado(associadoDto.getDocumento());
+
             associadoDto.setStatus(AssociadoStatus.ABLE_TO_VOTE);
             Associado associado = DtoEntityConverterUtil.convertToEntity(associadoDto, Associado.class);
             Associado savedAssociado = this.repository.save(associado);
@@ -42,6 +45,19 @@ public class AssociadoInteractorImpl implements AssociadoInteractor {
         }
     }
 
+    /**
+     * Validate if exists Associado
+     * with same documento
+     *
+     * @param documento 
+     */
+    private void validateExistingAssociado(String documento) throws Exception {
+        if(this.repository.findByDocumento(documento).isEmpty()) {
+            return;
+        }
+
+        throw new BadRequestException("Associado ja existente para documento: " + documento);
+    }
 
     /**
      * Method responsible to find Associado by documento
